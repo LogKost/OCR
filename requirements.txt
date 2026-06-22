@@ -1,0 +1,9 @@
+torch --index-url https://download.pytorch.org/whl/cu121
+torchvision --index-url https://download.pytorch.org/whl/cu121
+numpy>=1.24.0
+pandas>=2.0.0
+ultralytics>=8.3.0
+easyocr>=1.7.1
+streamlit>=1.30.0
+weasyprint>=61.0
+Pillow>=10.0.0
