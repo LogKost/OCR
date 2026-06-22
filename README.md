@@ -60,3 +60,13 @@ To launch the interactive Streamlit application for testing and visualization, r
 ```bash
 streamlit run app.py
 ```
+
+---
+
+## Project Outputs & Results
+
+All training metrics, logs, and summaries are saved in the `results/` directory. It contains the following files:
+
+* **`history.json`** — Contains the comprehensive training and evaluation logs for all models.
+* **`practice_report.pdf`** — An automatically generated PDF report summarizing the performance metrics.
+* **`report_generated.html`** — An interactive HTML version of the generated evaluation report.
