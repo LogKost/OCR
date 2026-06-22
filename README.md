@@ -43,9 +43,23 @@ python train_rtdetr.py
 
 ---
 
-## Evaluation & Metrics
+## Running the Web App & Testing
 
-Once the training is complete, collect and analyze the final metrics for all models by running:
+Before evaluating the models, you need to launch the interactive Streamlit application and upload your test dataset for each model:
+
+```bash
+streamlit run app.py
+```
+
+1. Open the application in your browser.
+2. Upload the test datasets into the UI to run inference for each trained model.
+3. The app will automatically save the execution data to `history.json`.
+
+---
+
+## Evaluation & Metrics Generation
+
+Once you have gathered the test results through the Streamlit app, run the evaluation script to process `history.json` and generate the final reports:
 
 ```bash
 python evaluate.py
@@ -53,20 +67,10 @@ python evaluate.py
 
 ---
 
-## Running the Web App
-
-To launch the interactive Streamlit application for testing and visualization, run:
-
-```bash
-streamlit run app.py
-```
-
----
-
 ## Project Outputs & Results
 
-All training metrics, logs, and summaries are saved in the `results/` directory. It contains the following files:
+After running `evaluate.py`, you can find the generated performance summaries in the `results/` directory:
 
-* **`history.json`** — Contains the comprehensive training and evaluation logs for all models.
+* **`history.json`** — Contains the raw training and evaluation logs gathered during the process.
 * **`practice_report.pdf`** — An automatically generated PDF report summarizing the performance metrics.
 * **`report_generated.html`** — An interactive HTML version of the generated evaluation report.
