@@ -7,163 +7,146 @@
         size: A4;
         margin: 20mm 15mm;
         @bottom-right { content: "Страница " counter(page) " из " counter(pages); font-family: Arial, sans-serif; font-size: 9pt; color: #718096; }
-        @bottom-left { content: "Отчет по результатам эксперимента | Вариант №25 OCR"; font-family: Arial, sans-serif; font-size: 9pt; color: #718096; }
+        @bottom-left { content: "Отчет по результатам эксперимента | Вариант №25"; font-family: Arial, sans-serif; font-size: 9pt; color: #718096; }
     }
-    body { font-family: Arial, sans-serif; color: #2d3748; line-height: 1.4; margin: 0; padding: 0; }
-    .header-container { border-bottom: 3px solid #2b6cb0; padding-bottom: 12px; margin-bottom: 24px; }
-    h1 { font-size: 16pt; color: #1a365d; margin: 0 0 6px 0; text-transform: uppercase; }
-    .subtitle { font-size: 10pt; color: #4a5568; margin: 0; font-style: italic; }
-    h2 { font-size: 12pt; color: #2b6cb0; margin: 20px 0 10px 0; padding-left: 8px; border-left: 4px solid #2b6cb0; page-break-after: avoid; }
-    p { font-size: 10pt; margin: 0 0 10px 0; text-align: justify; }
-    table.metrics-table { width: 100%; border-collapse: collapse; margin: 16px 0; page-break-inside: avoid; }
-    table.metrics-table th { background-color: #2b6cb0; color: #ffffff; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; }
-    table.metrics-table td { padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; }
-    table.metrics-table tr:nth-child(even) { background-color: #f7fafc; }
-    table.metrics-table td.left-align { text-align: left; font-weight: bold; color: #1a365d; }
-    .badge { display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; }
-    .badge-cnn { background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8; }
-    .badge-trans { background-color: #faf5ff; color: #6b46c1; border: 1px solid #e9d8fd; }
-    .bullet-list { margin: 0 0 16px 0; padding-left: 20px; font-size: 10pt; }
-    .bullet-list li { margin-bottom: 6px; text-align: justify; }
-    .summary-box { background-color: #ebf8ff; border-left: 4px solid #2b6cb0; padding: 12px; margin: 15px 0; font-size: 10pt; }
-    .framework-box { background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-top: 20px; }
 </style>
 </head>
-<body>
-<div class="header-container">
-    <h1>Отчет по экспериментальному сравнению архитектур (Вариант 25: OCR)</h1>
-    <div class="subtitle">Сгенерировано автоматически на основе накопленной истории инференса</div>
+<body style="font-family: Arial, sans-serif; color: #2d3748; line-height: 1.4; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+
+<div style="border-bottom: 3px solid #2b6cb0; padding-bottom: 12px; margin-bottom: 24px;">
+    <h1 style="font-size: 16pt; color: #1a365d; margin: 0 0 6px 0; text-transform: uppercase;">Отчет по экспериментальному сравнению архитектур (Вариант 25)</h1>
+    <div style="font-size: 10pt; color: #4a5568; margin: 0; font-style: italic;">Сгенерировано автоматически на основе накопленной истории инференса</div>
 </div>
 
-<h2>1. Сводные метрики качества и производительности моделей</h2>
-<p>В таблице ниже представлены результаты aggregation данных тестирования пяти различных архитектур нейронных сетей, полученные в ходе выполнения практического задания.</p>
+<h2 style="font-size: 12pt; color: #2b6cb0; margin: 20px 0 10px 0; padding-left: 8px; border-left: 4px solid #2b6cb0; page-break-after: avoid;">1. Сводные метрики качества и производительности моделей</h2>
+<p style="font-size: 10pt; margin: 0 0 10px 0; text-align: justify;">В таблице ниже представлены результаты агрегации данных тестирования пяти различных архитектур нейронных сетей, полученные в ходе выполнения практического задания.</p>
 
-<table class="metrics-table">
+<table style="width: 100%; border-collapse: collapse; margin: 16px 0; page-break-inside: avoid;">
     <thead>
-        <tr>
-            <th rowspan="2" style="width: 25%;">Архитектура модели</th>
-            <th rowspan="2" style="width: 12%;">Тип сети</th>
-            <th colspan="3">Метрики локализации (ТЗ)</th>
-            <th rowspan="2" style="width: 11%;">Время инф. (с)</th>
-            <th rowspan="2" style="width: 10%;">Размер</th>
-            <th colspan="3">Ошибки детекции (Кадры)</th>
+        <tr style="background-color: #2b6cb0; color: #ffffff;">
+            <th rowspan="2" style="width: 25%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Архитектура модели</th>
+            <th rowspan="2" style="width: 12%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Тип сети</th>
+            <th colspan="3" style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Метрики локализации</th>
+            <th rowspan="2" style="width: 11%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Время инф. (с)</th>
+            <th rowspan="2" style="width: 10%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Размер</th>
+            <th colspan="3" style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Ошибки детекции (Кадры)</th>
         </tr>
-        <tr>
-            <th>mAP50</th>
-            <th>Precision</th>
-            <th>Recall</th>
-            <th>TP</th>
-            <th>FP</th>
-            <th>FN</th>
+        <tr style="background-color: #2b6cb0; color: #ffffff;">
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">mAP50</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Precision</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Recall</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">TP</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">FP</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">FN</th>
         </tr>
     </thead>
     <tbody>
         
-        <tr>
-            <td class='left-align'>yolov9_ocr_det (best.pt)</td>
-            <td><span class='badge badge-cnn'>CNN GELAN</span></td>
-            <td>0.792</td>
-            <td>0.943</td>
-            <td>0.673</td>
-            <td>0.0195</td>
-            <td>4.4 MB</td>
-            <td>33</td>
-            <td>2</td>
-            <td>16</td>
+        <tr style="background-color: #ffffff;">
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov9_ocr_det (best.pt)</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">CNN GELAN</span></td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.792</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.943</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.673</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0195</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">4.4 MB</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">33</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">2</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">16</td>
         </tr>
         
-        <tr>
-            <td class='left-align'>rtdetr_ocr_det-2 (best.pt)</td>
-            <td><span class='badge badge-trans'>Transformer</span></td>
-            <td>0.722</td>
-            <td>0.687</td>
-            <td>0.786</td>
-            <td>0.0626</td>
-            <td>63.1 MB</td>
-            <td>44</td>
-            <td>20</td>
-            <td>12</td>
+        <tr style="background-color: #f7fafc;">
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov8_ocr_det (yolov8_custom_best.pt)</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">CNN Free</span></td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.721</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.838</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.633</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0129</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">6.0 MB</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">31</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">6</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">18</td>
         </tr>
         
-        <tr>
-            <td class='left-align'>yolov8_ocr_det (yolov8_custom_best.pt)</td>
-            <td><span class='badge badge-cnn'>CNN Free</span></td>
-            <td>0.721</td>
-            <td>0.838</td>
-            <td>0.633</td>
-            <td>0.0129</td>
-            <td>6.0 MB</td>
-            <td>31</td>
-            <td>6</td>
-            <td>18</td>
+        <tr style="background-color: #ffffff;">
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">rtdetr_ocr_det-2 (best.pt)</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #faf5ff; color: #6b46c1; border: 1px solid #e9d8fd;">Transformer</span></td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.712</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.680</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.774</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0428</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">63.1 MB</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">240</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">113</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">70</td>
         </tr>
         
-        <tr>
-            <td class='left-align'>yolo11_ocr_det (yolov11_custom_best.pt)</td>
-            <td><span class='badge badge-cnn'>CNN C3k2</span></td>
-            <td>0.664</td>
-            <td>0.763</td>
-            <td>0.592</td>
-            <td>0.0163</td>
-            <td>5.2 MB</td>
-            <td>29</td>
-            <td>9</td>
-            <td>20</td>
+        <tr style="background-color: #f7fafc;">
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolo11_ocr_det (yolov11_custom_best.pt)</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">CNN C3k2</span></td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.664</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.763</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.592</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0163</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">5.2 MB</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">29</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">9</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">20</td>
         </tr>
         
-        <tr>
-            <td class='left-align'>yolov5_ocr_det (best.pt)</td>
-            <td><span class='badge badge-cnn'>CNN Anchor</span></td>
-            <td>0.622</td>
-            <td>0.653</td>
-            <td>0.615</td>
-            <td>0.0101</td>
-            <td>5.0 MB</td>
-            <td>32</td>
-            <td>17</td>
-            <td>20</td>
+        <tr style="background-color: #ffffff;">
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov5_ocr_det (best.pt)</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">CNN Anchor</span></td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.622</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.653</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.615</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0101</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">5.0 MB</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">32</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">17</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">20</td>
         </tr>
         
     </tbody>
 </table>
 
-<div class="summary-box">
+<div style="background-color: #ebf8ff; border-left: 4px solid #2b6cb0; padding: 12px; margin: 15px 0; font-size: 10pt;">
     <strong>Статистический маркер:</strong> Согласно автоматическому ранжированию по метрике mAP50, наиболее эффективной архитектурой на текущем наборе данных является <strong>yolov9_ocr_det (best.pt)</strong>.
 </div>
 
-<h2>2. Количественный аудит распределения ошибок по моделям</h2>
-<p>Автоматически распознанные количественные показатели ложных срабатываний (FP) и пропусков (FN) для каждой исследуемой архитектуры:</p>
-<ul class="bullet-list">
+<h2 style="font-size: 12pt; color: #2b6cb0; margin: 20px 0 10px 0; padding-left: 8px; border-left: 4px solid #2b6cb0; page-break-after: avoid;">2. Количественный аудит распределения ошибок по моделям</h2>
+<p style="font-size: 10pt; margin: 0 0 10px 0; text-align: justify;">Автоматически распознанные количественные показатели ложных срабатываний (FP) и пропусков (FN) для каждой исследуемой архитектуры:</p>
+<ul style="margin: 0 0 16px 0; padding-left: 20px; font-size: 10pt;">
     
-        <li>
+        <li style="margin-bottom: 6px; text-align: justify;">
             <strong>yolov9_ocr_det (best.pt):</strong> 
             Зафиксировано ложных срабатываний (FP): 2 шт., 
             пропусков целевых объектов (FN): 16 шт. 
             При средней уверенности детекции 61.9%.
         </li>
         
-        <li>
-            <strong>rtdetr_ocr_det-2 (best.pt):</strong> 
-            Зафиксировано ложных срабатываний (FP): 20 шт., 
-            пропусков целевых объектов (FN): 12 шт. 
-            При средней уверенности детекции 61.4%.
-        </li>
-        
-        <li>
+        <li style="margin-bottom: 6px; text-align: justify;">
             <strong>yolov8_ocr_det (yolov8_custom_best.pt):</strong> 
             Зафиксировано ложных срабатываний (FP): 6 шт., 
             пропусков целевых объектов (FN): 18 шт. 
             При средней уверенности детекции 56.3%.
         </li>
         
-        <li>
+        <li style="margin-bottom: 6px; text-align: justify;">
+            <strong>rtdetr_ocr_det-2 (best.pt):</strong> 
+            Зафиксировано ложных срабатываний (FP): 113 шт., 
+            пропусков целевых объектов (FN): 70 шт. 
+            При средней уверенности детекции 61.0%.
+        </li>
+        
+        <li style="margin-bottom: 6px; text-align: justify;">
             <strong>yolo11_ocr_det (yolov11_custom_best.pt):</strong> 
             Зафиксировано ложных срабатываний (FP): 9 шт., 
             пропусков целевых объектов (FN): 20 шт. 
             При средней уверенности детекции 56.1%.
         </li>
         
-        <li>
+        <li style="margin-bottom: 6px; text-align: justify;">
             <strong>yolov5_ocr_det (best.pt):</strong> 
             Зафиксировано ложных срабатываний (FP): 17 шт., 
             пропусков целевых объектов (FN): 20 шт. 
@@ -172,7 +155,7 @@
         
 </ul>
 
-<div class="framework-box">
+<div style="background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-top: 20px;">
     <p style="margin: 0; font-size: 8.5pt; color: #4a5568; text-align: center;">
         Документ сформирован программно. Базовые библиотеки расчета: <strong>Pandas Dataframe API</strong>. Генератор PDF: <strong>WeasyPrint Engine</strong>.
     </p>

@@ -69,6 +69,7 @@ def main():
     summary = summary.sort_values(by="map50", ascending=False)
     best_model = summary.iloc[0]["selected_architecture"]
 
+    row_index = 0
     for _, row in summary.iterrows():
         full_arch_name = row["selected_architecture"]
 
@@ -76,8 +77,12 @@ def main():
 
         arch_label = folder_name.split("_ocr")[0].lower()
 
-        badge_type = "badge-trans" if "rtdetr" in arch_label else "badge-cnn"
-        net_type = arch_types.get(arch_label, "CNN")
+        if "rtdetr" in arch_label:
+            badge_style = "display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #faf5ff; color: #6b46c1; border: 1px solid #e9d8fd;"
+            net_type = arch_types.get(arch_label, "Transformer")
+        else:
+            badge_style = "display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;"
+            net_type = arch_types.get(arch_label, "CNN")
 
         possible_path = os.path.join("models", folder_name, "weights", "best.pt")
 
@@ -87,23 +92,26 @@ def main():
         else:
             size_str = "Файл не найден"
 
+        bg_color = "#f7fafc" if row_index % 2 == 1 else "#ffffff"
+        row_index += 1
+
         table_rows += f"""
-        <tr>
-            <td class='left-align'>{full_arch_name}</td>
-            <td><span class='badge {badge_type}'>{net_type}</span></td>
-            <td>{row["map50"]:.3f}</td>
-            <td>{row["precision"]:.3f}</td>
-            <td>{row["recall"]:.3f}</td>
-            <td>{row["inference_time_seconds"]:.4f}</td>
-            <td>{size_str}</td>
-            <td>{int(row["is_tp"])}</td>
-            <td>{int(row["is_fp"])}</td>
-            <td>{int(row["is_fn"])}</td>
+        <tr style="background-color: {bg_color};">
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">{full_arch_name}</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="{badge_style}">{net_type}</span></td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">{row["map50"]:.3f}</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">{row["precision"]:.3f}</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">{row["recall"]:.3f}</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">{row["inference_time_seconds"]:.4f}</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">{size_str}</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">{int(row["is_tp"])}</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">{int(row["is_fp"])}</td>
+            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">{int(row["is_fn"])}</td>
         </tr>
         """
 
         error_analysis_items += f"""
-        <li>
+        <li style="margin-bottom: 6px; text-align: justify;">
             <strong>{full_arch_name}:</strong> 
             Зафиксировано ложных срабатываний (FP): {int(row["is_fp"])} шт., 
             пропусков целевых объектов (FN): {int(row["is_fn"])} шт. 
@@ -119,55 +127,38 @@ def main():
     @page {{
         size: A4;
         margin: 20mm 15mm;
-        @bottom-right {{ content: "Страница " counter(page) " из " counter(pages); font-family: Arial, sans-serif; font-size: 9pt; color:
-        @bottom-left {{ content: "Отчет по результатам эксперимента | Вариант №25 OCR"; font-family: Arial, sans-serif; font-size: 9pt; color:
+        @bottom-right {{ content: "Страница " counter(page) " из " counter(pages); font-family: Arial, sans-serif; font-size: 9pt; color: #718096; }}
+        @bottom-left {{ content: "Отчет по результатам эксперимента | Вариант №25"; font-family: Arial, sans-serif; font-size: 9pt; color: #718096; }}
     }}
-    body {{ font-family: Arial, sans-serif; color:
-    .header-container {{ border-bottom: 3px solid
-    h1 {{ font-size: 16pt; color:
-    .subtitle {{ font-size: 10pt; color:
-    h2 {{ font-size: 12pt; color:
-    p {{ font-size: 10pt; margin: 0 0 10px 0; text-align: justify; }}
-    table.metrics-table {{ width: 100%; border-collapse: collapse; margin: 16px 0; page-break-inside: avoid; }}
-    table.metrics-table th {{ background-color:
-    table.metrics-table td {{ padding: 6px 4px; font-size: 8.5pt; border: 1px solid
-    table.metrics-table tr:nth-child(even) {{ background-color:
-    table.metrics-table td.left-align {{ text-align: left; font-weight: bold; color:
-    .badge {{ display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; }}
-    .badge-cnn {{ background-color:
-    .badge-trans {{ background-color:
-    .bullet-list {{ margin: 0 0 16px 0; padding-left: 20px; font-size: 10pt; }}
-    .bullet-list li {{ margin-bottom: 6px; text-align: justify; }}
-    .summary-box {{ background-color:
-    .framework-box {{ background-color:
 </style>
 </head>
-<body>
-<div class="header-container">
-    <h1>Отчет по экспериментальному сравнению архитектур (Вариант 25)</h1>
-    <div class="subtitle">Сгенерировано автоматически на основе накопленной истории инференса</div>
+<body style="font-family: Arial, sans-serif; color: #2d3748; line-height: 1.4; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+
+<div style="border-bottom: 3px solid #2b6cb0; padding-bottom: 12px; margin-bottom: 24px;">
+    <h1 style="font-size: 16pt; color: #1a365d; margin: 0 0 6px 0; text-transform: uppercase;">Отчет по экспериментальному сравнению архитектур (Вариант 25)</h1>
+    <div style="font-size: 10pt; color: #4a5568; margin: 0; font-style: italic;">Сгенерировано автоматически на основе накопленной истории инференса</div>
 </div>
 
-<h2>1. Сводные метрики качества и производительности моделей</h2>
-<p>В таблице ниже представлены результаты агрегации данных тестирования пяти различных архитектур нейронных сетей, полученные в ходе выполнения практического задания.</p>
+<h2 style="font-size: 12pt; color: #2b6cb0; margin: 20px 0 10px 0; padding-left: 8px; border-left: 4px solid #2b6cb0; page-break-after: avoid;">1. Сводные метрики качества и производительности моделей</h2>
+<p style="font-size: 10pt; margin: 0 0 10px 0; text-align: justify;">В таблице ниже представлены результаты агрегации данных тестирования пяти различных архитектур нейронных сетей, полученные в ходе выполнения практического задания.</p>
 
-<table class="metrics-table">
+<table style="width: 100%; border-collapse: collapse; margin: 16px 0; page-break-inside: avoid;">
     <thead>
-        <tr>
-            <th rowspan="2" style="width: 25%;">Архитектура модели</th>
-            <th rowspan="2" style="width: 12%;">Тип сети</th>
-            <th colspan="3">Метрики локализации</th>
-            <th rowspan="2" style="width: 11%;">Время инф. (с)</th>
-            <th rowspan="2" style="width: 10%;">Размер</th>
-            <th colspan="3">Ошибки детекции (Кадры)</th>
+        <tr style="background-color: #2b6cb0; color: #ffffff;">
+            <th rowspan="2" style="width: 25%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Архитектура модели</th>
+            <th rowspan="2" style="width: 12%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Тип сети</th>
+            <th colspan="3" style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Метрики локализации</th>
+            <th rowspan="2" style="width: 11%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Время инф. (с)</th>
+            <th rowspan="2" style="width: 10%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Размер</th>
+            <th colspan="3" style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Ошибки детекции (Кадры)</th>
         </tr>
-        <tr>
-            <th>mAP50</th>
-            <th>Precision</th>
-            <th>Recall</th>
-            <th>TP</th>
-            <th>FP</th>
-            <th>FN</th>
+        <tr style="background-color: #2b6cb0; color: #ffffff;">
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">mAP50</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Precision</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Recall</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">TP</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">FP</th>
+            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">FN</th>
         </tr>
     </thead>
     <tbody>
@@ -175,18 +166,18 @@ def main():
     </tbody>
 </table>
 
-<div class="summary-box">
+<div style="background-color: #ebf8ff; border-left: 4px solid #2b6cb0; padding: 12px; margin: 15px 0; font-size: 10pt;">
     <strong>Статистический маркер:</strong> Согласно автоматическому ранжированию по метрике mAP50, наиболее эффективной архитектурой на текущем наборе данных является <strong>{best_model}</strong>.
 </div>
 
-<h2>2. Количественный аудит распределения ошибок по моделям</h2>
-<p>Автоматически распознанные количественные показатели ложных срабатываний (FP) и пропусков (FN) для каждой исследуемой архитектуры:</p>
-<ul class="bullet-list">
+<h2 style="font-size: 12pt; color: #2b6cb0; margin: 20px 0 10px 0; padding-left: 8px; border-left: 4px solid #2b6cb0; page-break-after: avoid;">2. Количественный аудит распределения ошибок по моделям</h2>
+<p style="font-size: 10pt; margin: 0 0 10px 0; text-align: justify;">Автоматически распознанные количественные показатели ложных срабатываний (FP) и пропусков (FN) для каждой исследуемой архитектуры:</p>
+<ul style="margin: 0 0 16px 0; padding-left: 20px; font-size: 10pt;">
     {error_analysis_items}
 </ul>
 
-<div class="framework-box">
-    <p style="margin: 0; font-size: 8.5pt; color:
+<div style="background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-top: 20px;">
+    <p style="margin: 0; font-size: 8.5pt; color: #4a5568; text-align: center;">
         Документ сформирован программно. Базовые библиотеки расчета: <strong>Pandas Dataframe API</strong>. Генератор PDF: <strong>WeasyPrint Engine</strong>.
     </p>
 </div>
@@ -198,8 +189,10 @@ def main():
     with open(output_html_path, "w", encoding="utf-8") as f:
         f.write(html_template)
 
-    print("HTML-шаблон подготовлен на основе логов. Запуск компиляции в PDF...")
-    HTML(output_html_path).write_pdf(output_pdf_path)
+    print("HTML-шаблон подготовлен. Запуск компиляции в PDF...")
+
+    HTML(output_html_path, base_url=os.getcwd()).write_pdf(output_pdf_path)
+
     print(f"Итоговый аналитический отчет сохранен в: {output_pdf_path}")
 
 
