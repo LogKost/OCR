@@ -18,6 +18,9 @@ Install all the required Python libraries using `pip`:
 pip install -r requirements.txt
 ```
 
+Additionally, this project requires **GTK 3** to be installed on your system (e.g., for reporting or UI components). 
+* **Windows Users:** Download and run the [GTK 3 Runtime Environment Installer (v2022-01-04)](https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/tag/2022-01-04). Follow the setup wizard to complete the installation.
+
 ---
 
 ## Training Models
