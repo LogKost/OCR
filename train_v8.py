@@ -3,11 +3,10 @@ from ultralytics import YOLO
 
 
 def main():
+    PROJECT_ROOT = os.path.abspath("models")
     model = YOLO("yolov8n.pt")
 
-    PROJECT_ROOT = os.path.abspath("models")
-
-    results = model.train(
+    model.train(
         data="data/data.yaml",
         epochs=30,
         imgsz=640,
@@ -15,7 +14,6 @@ def main():
         name="yolov8_ocr_det",
         device=0,
     )
-    print("Обучение успешно завершено!")
 
 
 if __name__ == "__main__":

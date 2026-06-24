@@ -4,10 +4,9 @@ from ultralytics import YOLO
 
 def main():
     PROJECT_ROOT = os.path.abspath("models")
-
     model = YOLO("yolo11n.pt")
 
-    results = model.train(
+    model.train(
         data="data/data.yaml",
         epochs=30,
         imgsz=640,
