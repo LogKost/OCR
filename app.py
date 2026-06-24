@@ -123,9 +123,9 @@ class UniversalInferenceFactory:
             if conf >= 60.0 and text_output != "Н/Д":
                 auto_quality_mark = "Корректно"
             elif conf < 40.0:
-                auto_quality_mark = "Ошибка локализации (Низкий Confidence)"
+                auto_quality_mark = "Ошибка локализации (Низкая уверенность)"
             else:
-                auto_quality_mark = "Ошибка распознавания текста (OCR)"
+                auto_quality_mark = "Ошибка распознавания текста"
 
             parsed_results.append(
                 {
@@ -194,16 +194,16 @@ if uploaded_files and engine is not None:
                     "auto_quality_mark": block["evaluation"],
                     "is_tp": 1 if block["evaluation"] == "Корректно" else 0,
                     "is_fp": 1
-                    if block["evaluation"] == "Ошибка локализации (Низкий Confidence)"
+                    if block["evaluation"] == "Ошибка локализации (Низкая уверенность)"
                     else 0,
                     "is_fn": 1
-                    if block["evaluation"] == "Ошибка распознавания текста (OCR)"
+                    if block["evaluation"] == "Ошибка распознавания текста"
                     else 0,
                 }
                 session_records.append(log_data)
 
             with col2:
-                st.subheader("Результат локализации (Text Detection)")
+                st.subheader("Результат локализации")
                 if visual_output is not None:
                     st.image(visual_output, channels="BGR", use_container_width=True)
         else:
