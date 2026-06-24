@@ -13,7 +13,7 @@ def main():
         imgsz=640,
         project=PROJECT_ROOT,
         name="yolo11_ocr_det",
-        device=0
+        device=0,
     )
 
 

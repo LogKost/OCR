@@ -11,7 +11,9 @@ import numpy as np
 st.set_page_config(layout="wide")
 
 st.title("Оптическая система распознавания текста в городской среде")
-st.write("Модуль автоматической локализации и распознавания текстовой информации на объектах инфраструктуры.")
+st.write(
+    "Модуль автоматической локализации и распознавания текстовой информации на объектах инфраструктуры."
+)
 
 st.sidebar.header("Конфигурация системы")
 
@@ -19,7 +21,11 @@ st.sidebar.header("Конфигурация системы")
 @st.cache_resource
 def determine_hardware_device():
     cuda_available = torch.cuda.is_available()
-    return "cuda" if cuda_available else "cpu", cuda_available, "CUDA" if cuda_available else "CPU"
+    return (
+        "cuda" if cuda_available else "cpu",
+        cuda_available,
+        "CUDA" if cuda_available else "CPU",
+    )
 
 
 DEVICE_TYPE, IS_GPU, DEVICE_LABEL = determine_hardware_device()
@@ -32,16 +38,23 @@ if os.path.exists(models_dir):
     for root, dirs, files in os.walk(models_dir):
         for file in files:
             if file.endswith(".pt") and "last.pt" not in file:
-                arch_name = os.path.basename(root) if os.path.basename(root) != "weights" else os.path.basename(
-                    os.path.dirname(root))
-                model_options[f"{arch_name} ({file})"] = os.path.relpath(os.path.join(root, file))
+                arch_name = (
+                    os.path.basename(root)
+                    if os.path.basename(root) != "weights"
+                    else os.path.basename(os.path.dirname(root))
+                )
+                model_options[f"{arch_name} ({file})"] = os.path.relpath(
+                    os.path.join(root, file)
+                )
 
 for file in os.listdir("."):
     if file.endswith(".pt") and os.path.isfile(file):
         model_options[f"Корень ({file})"] = file
 
 if model_options:
-    selected_model_label = st.sidebar.selectbox("Архитектура модели:", list(model_options.keys()))
+    selected_model_label = st.sidebar.selectbox(
+        "Архитектура модели:", list(model_options.keys())
+    )
     model_path = model_options[selected_model_label]
 
     if os.path.exists(model_path):
@@ -54,7 +67,7 @@ else:
 
 @st.cache_resource
 def load_ocr_engine():
-    return easyocr.Reader(['ru', 'en'], gpu=IS_GPU)
+    return easyocr.Reader(["ru", "en"], gpu=IS_GPU)
 
 
 recognizer_engine = load_ocr_engine()
@@ -73,6 +86,7 @@ class UniversalInferenceFactory:
 
         if self.path.endswith(".pt"):
             from ultralytics import YOLO
+
             model = YOLO(self.path)
             model.to(self.device_type)
             return model
@@ -95,7 +109,10 @@ class UniversalInferenceFactory:
             conf = box.conf[0].item() * 100
             x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
 
-            cropped = img_np[max(0, y1):min(img_np.shape[0], y2), max(0, x1):min(img_np.shape[1], x2)]
+            cropped = img_np[
+                max(0, y1) : min(img_np.shape[0], y2),
+                max(0, x1) : min(img_np.shape[1], x2),
+            ]
             text_output = "Н/Д"
 
             if cropped.size > 0:
@@ -110,22 +127,28 @@ class UniversalInferenceFactory:
             else:
                 auto_quality_mark = "Ошибка распознавания текста (OCR)"
 
-            parsed_results.append({
-                "coordinates": [x1, y1, x2, y2],
-                "confidence": conf,
-                "text": text_output,
-                "evaluation": auto_quality_mark
-            })
+            parsed_results.append(
+                {
+                    "coordinates": [x1, y1, x2, y2],
+                    "confidence": conf,
+                    "text": text_output,
+                    "evaluation": auto_quality_mark,
+                }
+            )
 
         return parsed_results, annotated_image, inference_duration
 
 
-engine = UniversalInferenceFactory(model_path, DEVICE_TYPE, recognizer_engine) if model_path else None
+engine = (
+    UniversalInferenceFactory(model_path, DEVICE_TYPE, recognizer_engine)
+    if model_path
+    else None
+)
 
 uploaded_files = st.file_uploader(
     "Загрузка изображений для пакетного анализа:",
     type=["jpg", "jpeg", "png"],
-    accept_multiple_files=True
+    accept_multiple_files=True,
 )
 
 if uploaded_files and engine is not None:
@@ -143,7 +166,9 @@ if uploaded_files and engine is not None:
             st.subheader("Исходное изображение")
             st.image(source_image, use_container_width=True)
 
-        detected_blocks, visual_output, exec_time = engine.execute_inference(source_image)
+        detected_blocks, visual_output, exec_time = engine.execute_inference(
+            source_image
+        )
 
         st.subheader("Аналитический отчет по кадру")
         total_segments = len(detected_blocks)
@@ -158,18 +183,22 @@ if uploaded_files and engine is not None:
                 )
 
                 log_data = {
-                    "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "filename": uploaded_file.name,
                     "selected_architecture": selected_model_label,
                     "hardware_environment": DEVICE_LABEL,
                     "inference_time_seconds": round(exec_time, 4),
-                    "detection_confidence_percent": round(block['confidence'], 2),
-                    "bounding_box_geometry": block['coordinates'],
-                    "ocr_output_text": block['text'],
-                    "auto_quality_mark": block['evaluation'],
-                    "is_tp": 1 if block['evaluation'] == "Корректно" else 0,
-                    "is_fp": 1 if block['evaluation'] == "Ошибка локализации (Низкий Confidence)" else 0,
-                    "is_fn": 1 if block['evaluation'] == "Ошибка распознавания текста (OCR)" else 0
+                    "detection_confidence_percent": round(block["confidence"], 2),
+                    "bounding_box_geometry": block["coordinates"],
+                    "ocr_output_text": block["text"],
+                    "auto_quality_mark": block["evaluation"],
+                    "is_tp": 1 if block["evaluation"] == "Корректно" else 0,
+                    "is_fp": 1
+                    if block["evaluation"] == "Ошибка локализации (Низкий Confidence)"
+                    else 0,
+                    "is_fn": 1
+                    if block["evaluation"] == "Ошибка распознавания текста (OCR)"
+                    else 0,
                 }
                 session_records.append(log_data)
 
@@ -184,7 +213,7 @@ if uploaded_files and engine is not None:
             st.warning("Текстовые области на данном кадре не обнаружены.")
 
             log_data = {
-                "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "filename": uploaded_file.name,
                 "selected_architecture": selected_model_label,
                 "hardware_environment": DEVICE_LABEL,
@@ -195,11 +224,13 @@ if uploaded_files and engine is not None:
                 "auto_quality_mark": "Объекты не найдены",
                 "is_tp": 0,
                 "is_fp": 0,
-                "is_fn": 1
+                "is_fn": 1,
             }
             session_records.append(log_data)
 
-        st.text(f"Время анализа кадра: {exec_time:.4f} сек. | Количество найденных сегментов: {total_segments}")
+        st.text(
+            f"Время анализа кадра: {exec_time:.4f} сек. | Количество найденных сегментов: {total_segments}"
+        )
         st.markdown("---")
 
     if session_records:

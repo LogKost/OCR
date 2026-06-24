@@ -1,6 +1,7 @@
 import os
 from ultralytics import RTDETR
 
+
 def main():
     PROJECT_ROOT = os.path.abspath("models")
     run_name = "rtdetr_ocr_det"
@@ -16,8 +17,9 @@ def main():
         device=0,
         batch=4,
         workers=2,
-        amp=True
+        amp=True,
     )
+
 
 if __name__ == "__main__":
     main()

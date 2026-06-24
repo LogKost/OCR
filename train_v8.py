@@ -1,6 +1,7 @@
 import os
 from ultralytics import YOLO
 
+
 def main():
     model = YOLO("yolov8n.pt")
 
@@ -12,9 +13,10 @@ def main():
         imgsz=640,
         project=PROJECT_ROOT,
         name="yolov8_ocr_det",
-        device=0
+        device=0,
     )
     print("Обучение успешно завершено!")
+
 
 if __name__ == "__main__":
     main()
