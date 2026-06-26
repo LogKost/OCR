@@ -74,6 +74,6 @@ python evaluate.py
 
 After running `evaluate.py`, you can find the generated performance summaries in the `results/` directory:
 
-* **`history.json`** — Contains the raw training and evaluation logs gathered during the process.
+* **`history.jsonl`** — Contains the raw training and evaluation logs gathered during the process.
 * **`practice_report.pdf`** — An automatically generated PDF report summarizing the performance metrics.
 * **`report_generated.html`** — An interactive HTML version of the generated evaluation report.
