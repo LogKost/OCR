@@ -47,9 +47,6 @@ if os.path.exists(models_dir):
                     os.path.join(root, file)
                 )
 
-for file in os.listdir("."):
-    if file.endswith(".pt") and os.path.isfile(file):
-        model_options[f"Корень ({file})"] = file
 
 if model_options:
     selected_model_label = st.sidebar.selectbox(
@@ -174,13 +171,34 @@ if uploaded_files and engine is not None:
         total_segments = len(detected_blocks)
 
         if total_segments > 0:
-            for idx, block in enumerate(detected_blocks):
-                st.markdown(
-                    f"**Сегмент №{idx + 1}** | "
-                    f"Уверенность детекции: `{block['confidence']:.2f}%` | "
-                    f"Текст: `{block['text']}` | "
-                    f"Авто-статус: **{block['evaluation']}**"
+            m1, m2 = st.columns(2)
+            with m1:
+                st.metric(
+                    label="Всего найдено текстовых областей", value=total_segments
                 )
+            with m2:
+                max_conf = max([b["confidence"] for b in detected_blocks])
+                st.metric(
+                    label="Максимальная уверенность детектора", value=f"{max_conf:.1f}%"
+                )
+
+            st.write("---")
+
+            for idx, block in enumerate(detected_blocks):
+                card_title = f"Сегмент №{idx + 1} | Текст: «{block['text']}»"
+
+                with st.expander(card_title, expanded=True):
+                    c_col1, c_col2 = st.columns(2)
+                    with c_col1:
+                        st.markdown(f"**Модель детекции:**")
+                        st.write(f"Точность локализации: `{block['confidence']:.2f}%`")
+                        st.write(
+                            f"Геометрия рамки `[x1, y1, x2, y2]`: `{block['coordinates']}`"
+                        )
+                    with c_col2:
+                        st.markdown(f"**Результат распознавания:**")
+                        st.info(f"Распознанный текст: **{block['text']}**")
+                        st.write(f"Авто-оценка качества: {block['evaluation']}")
 
                 log_data = {
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
