@@ -190,13 +190,13 @@ if uploaded_files and engine is not None:
                 with st.expander(card_title, expanded=True):
                     c_col1, c_col2 = st.columns(2)
                     with c_col1:
-                        st.markdown(f"**Модель детекции:**")
+                        st.markdown("**Модель детекции:**")
                         st.write(f"Точность локализации: `{block['confidence']:.2f}%`")
                         st.write(
                             f"Геометрия рамки `[x1, y1, x2, y2]`: `{block['coordinates']}`"
                         )
                     with c_col2:
-                        st.markdown(f"**Результат распознавания:**")
+                        st.markdown("**Результат распознавания:**")
                         st.info(f"Распознанный текст: **{block['text']}**")
                         st.write(f"Авто-оценка качества: {block['evaluation']}")
 
