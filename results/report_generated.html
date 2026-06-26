@@ -1,164 +1,135 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-<meta charset="UTF-8">
-<style>
-    @page {
-        size: A4;
-        margin: 20mm 15mm;
-        @bottom-right { content: "Страница " counter(page) " из " counter(pages); font-family: Arial, sans-serif; font-size: 9pt; color: #718096; }
-        @bottom-left { content: "Отчет по результатам эксперимента | Вариант №25"; font-family: Arial, sans-serif; font-size: 9pt; color: #718096; }
-    }
-</style>
-</head>
-<body style="font-family: Arial, sans-serif; color: #2d3748; line-height: 1.4; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
-
-<div style="border-bottom: 3px solid #2b6cb0; padding-bottom: 12px; margin-bottom: 24px;">
-    <h1 style="font-size: 16pt; color: #1a365d; margin: 0 0 6px 0; text-transform: uppercase;">Отчет по экспериментальному сравнению архитектур (Вариант 25)</h1>
-    <div style="font-size: 10pt; color: #4a5568; margin: 0; font-style: italic;">Сгенерировано автоматически на основе накопленной истории инференса</div>
+<head><meta charset="UTF-8"></head>
+<body style="font-family: Arial, sans-serif; color: #2d3748; line-height: 1.4; margin: 10px; padding: 0;">
+<div style="border-bottom: 3px solid #2b6cb0; padding-bottom: 10px; margin-bottom: 20px;">
+    <h1 style="font-size: 15pt; color: #1a365d; margin: 0;">Экспериментальный отчет по сравнению архитектур</h1>
 </div>
 
-<h2 style="font-size: 12pt; color: #2b6cb0; margin: 20px 0 10px 0; padding-left: 8px; border-left: 4px solid #2b6cb0; page-break-after: avoid;">1. Сводные метрики качества и производительности моделей</h2>
-<p style="font-size: 10pt; margin: 0 0 10px 0; text-align: justify;">В таблице ниже представлены результаты агрегации данных тестирования пяти различных архитектур нейронных сетей, полученные в ходе выполнения практического задания.</p>
-
-<table style="width: 100%; border-collapse: collapse; margin: 16px 0; page-break-inside: avoid;">
+<h2 style="font-size: 11.5pt; color: #2b6cb0;">1. Сводные метрики качества и производительности моделей</h2>
+<table style="width: 100%; border-collapse: collapse; margin: 12px 0;">
     <thead>
-        <tr style="background-color: #2b6cb0; color: #ffffff;">
-            <th rowspan="2" style="width: 25%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Архитектура модели</th>
-            <th rowspan="2" style="width: 12%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Тип сети</th>
-            <th colspan="3" style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Метрики локализации</th>
-            <th rowspan="2" style="width: 11%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Время инф. (с)</th>
-            <th rowspan="2" style="width: 10%; font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Размер</th>
-            <th colspan="3" style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Ошибки детекции (Кадры)</th>
-        </tr>
-        <tr style="background-color: #2b6cb0; color: #ffffff;">
-            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">mAP50</th>
-            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Precision</th>
-            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">Recall</th>
-            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">TP</th>
-            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">FP</th>
-            <th style="font-weight: bold; font-size: 9pt; text-align: center; padding: 8px 4px; border: 1px solid #2b6cb0; color: #ffffff;">FN</th>
+        <tr style="background-color: #2b6cb0; color: #ffffff; font-size: 9pt;">
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white; text-align: left;">Наименование</th>
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white;">Архитектура</th>
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white;">mAP50</th>
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white;">Precision</th>
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white;">Recall</th>
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white;">Время инф. (с)</th>
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white;">Вес файла</th>
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white;">TP</th>
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white;">FP</th>
+            <th style="padding: 8px 6px; border: 1px solid #2b6cb0; color: white;">FN</th>
         </tr>
     </thead>
     <tbody>
-        
         <tr style="background-color: #ffffff;">
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov9_ocr_det (best.pt)</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">CNN GELAN</span></td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.792</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.943</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.673</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0195</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">4.4 MB</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">33</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">2</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">16</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">YOLOv9</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">YOLOv9-Programmable-Anchor-Architecture</span></td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.742</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.778</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.737</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0184</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">4.4 MB</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">28</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">8</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">10</td>
         </tr>
         
         <tr style="background-color: #f7fafc;">
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov8_ocr_det (yolov8_custom_best.pt)</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">CNN Free</span></td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.721</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.838</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.633</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0129</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">6.0 MB</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">31</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">6</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">18</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">YOLOv8</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">YOLOv8-Anchor-Free-Architecture</span></td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.704</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.700</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.737</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0096</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">6.0 MB</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">28</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">12</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">10</td>
         </tr>
         
         <tr style="background-color: #ffffff;">
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">rtdetr_ocr_det-2 (best.pt)</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #faf5ff; color: #6b46c1; border: 1px solid #e9d8fd;">Transformer</span></td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.712</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.680</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.774</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0428</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">63.1 MB</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">240</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">113</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">70</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">YOLOv11</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">YOLO11-Modern-Baseline-Architecture</span></td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.648</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.619</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.703</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0122</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">5.2 MB</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">26</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">16</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">11</td>
         </tr>
         
         <tr style="background-color: #f7fafc;">
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolo11_ocr_det (yolov11_custom_best.pt)</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">CNN C3k2</span></td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.664</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.763</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.592</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0163</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">5.2 MB</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">29</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">9</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">20</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">YOLOv5</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">YOLOv5-Anchor-Based-Architecture</span></td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.595</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.540</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.675</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0119</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">5.0 MB</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">27</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">23</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">13</td>
         </tr>
         
         <tr style="background-color: #ffffff;">
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov5_ocr_det (best.pt)</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;">CNN Anchor</span></td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.622</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.653</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.615</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">0.0101</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">5.0 MB</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">32</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">17</td>
-            <td style="padding: 6px 4px; font-size: 8.5pt; border: 1px solid #e2e8f0; text-align: center;">20</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">RT-DETR</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;"><span style="display: inline-block; padding: 2px 6px; font-weight: bold; border-radius: 4px; font-size: 8pt; background-color: #faf5ff; color: #6b46c1; border: 1px solid #e9d8fd;">Transformer-based DETR End-to-End</span></td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.592</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.542</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.667</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0236</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">63.1 MB</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">32</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">27</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">16</td>
         </tr>
-        
-    </tbody>
+        </tbody>
 </table>
 
 <div style="background-color: #ebf8ff; border-left: 4px solid #2b6cb0; padding: 12px; margin: 15px 0; font-size: 10pt;">
-    <strong>Статистический маркер:</strong> Согласно автоматическому ранжированию по метрике mAP50, наиболее эффективной архитектурой на текущем наборе данных является <strong>yolov9_ocr_det (best.pt)</strong>.
+    <strong>Вывод:</strong> На основе тестирования и автоматического ранжирования по целевому критерию mAP50, наиболее эффективный архитектурный подход для поиска текста в городской среде продемонстрировала модель <strong>YOLOv9</strong>.
 </div>
 
-<h2 style="font-size: 12pt; color: #2b6cb0; margin: 20px 0 10px 0; padding-left: 8px; border-left: 4px solid #2b6cb0; page-break-after: avoid;">2. Количественный аудит распределения ошибок по моделям</h2>
-<p style="font-size: 10pt; margin: 0 0 10px 0; text-align: justify;">Автоматически распознанные количественные показатели ложных срабатываний (FP) и пропусков (FN) для каждой исследуемой архитектуры:</p>
-<ul style="margin: 0 0 16px 0; padding-left: 20px; font-size: 10pt;">
-    
-        <li style="margin-bottom: 6px; text-align: justify;">
-            <strong>yolov9_ocr_det (best.pt):</strong> 
-            Зафиксировано ложных срабатываний (FP): 2 шт., 
-            пропусков целевых объектов (FN): 16 шт. 
-            При средней уверенности детекции 61.9%.
+<h2 style="font-size: 11.5pt; color: #2b6cb0;">2. Количественный аудит распределения реальных ошибок</h2>
+<ul>
+        <li style="margin-bottom: 6px; text-align: justify; font-size: 10pt;">
+            <strong>YOLOv9:</strong> 
+            Ложных срабатываний/локализаций (FP): <span style="color:red; font-weight:bold;">8</span> шт., 
+            ошибок распознавания/пропусков текста (FN): <span style="color:orange; font-weight:bold;">10</span> шт. 
+            Успешных распознаваний (TP): <span style="color:green; font-weight:bold;">28</span> шт.
         </li>
         
-        <li style="margin-bottom: 6px; text-align: justify;">
-            <strong>yolov8_ocr_det (yolov8_custom_best.pt):</strong> 
-            Зафиксировано ложных срабатываний (FP): 6 шт., 
-            пропусков целевых объектов (FN): 18 шт. 
-            При средней уверенности детекции 56.3%.
+        <li style="margin-bottom: 6px; text-align: justify; font-size: 10pt;">
+            <strong>YOLOv8:</strong> 
+            Ложных срабатываний/локализаций (FP): <span style="color:red; font-weight:bold;">12</span> шт., 
+            ошибок распознавания/пропусков текста (FN): <span style="color:orange; font-weight:bold;">10</span> шт. 
+            Успешных распознаваний (TP): <span style="color:green; font-weight:bold;">28</span> шт.
         </li>
         
-        <li style="margin-bottom: 6px; text-align: justify;">
-            <strong>rtdetr_ocr_det-2 (best.pt):</strong> 
-            Зафиксировано ложных срабатываний (FP): 113 шт., 
-            пропусков целевых объектов (FN): 70 шт. 
-            При средней уверенности детекции 61.0%.
+        <li style="margin-bottom: 6px; text-align: justify; font-size: 10pt;">
+            <strong>YOLOv11:</strong> 
+            Ложных срабатываний/локализаций (FP): <span style="color:red; font-weight:bold;">16</span> шт., 
+            ошибок распознавания/пропусков текста (FN): <span style="color:orange; font-weight:bold;">11</span> шт. 
+            Успешных распознаваний (TP): <span style="color:green; font-weight:bold;">26</span> шт.
         </li>
         
-        <li style="margin-bottom: 6px; text-align: justify;">
-            <strong>yolo11_ocr_det (yolov11_custom_best.pt):</strong> 
-            Зафиксировано ложных срабатываний (FP): 9 шт., 
-            пропусков целевых объектов (FN): 20 шт. 
-            При средней уверенности детекции 56.1%.
+        <li style="margin-bottom: 6px; text-align: justify; font-size: 10pt;">
+            <strong>YOLOv5:</strong> 
+            Ложных срабатываний/локализаций (FP): <span style="color:red; font-weight:bold;">23</span> шт., 
+            ошибок распознавания/пропусков текста (FN): <span style="color:orange; font-weight:bold;">13</span> шт. 
+            Успешных распознаваний (TP): <span style="color:green; font-weight:bold;">27</span> шт.
         </li>
         
-        <li style="margin-bottom: 6px; text-align: justify;">
-            <strong>yolov5_ocr_det (best.pt):</strong> 
-            Зафиксировано ложных срабатываний (FP): 17 шт., 
-            пропусков целевых объектов (FN): 20 шт. 
-            При средней уверенности детекции 54.3%.
+        <li style="margin-bottom: 6px; text-align: justify; font-size: 10pt;">
+            <strong>RT-DETR:</strong> 
+            Ложных срабатываний/локализаций (FP): <span style="color:red; font-weight:bold;">27</span> шт., 
+            ошибок распознавания/пропусков текста (FN): <span style="color:orange; font-weight:bold;">16</span> шт. 
+            Успешных распознаваний (TP): <span style="color:green; font-weight:bold;">32</span> шт.
         </li>
-        
-</ul>
-
-<div style="background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-top: 20px;">
-    <p style="margin: 0; font-size: 8.5pt; color: #4a5568; text-align: center;">
-        Документ сформирован программно. Базовые библиотеки расчета: <strong>Pandas Dataframe API</strong>. Генератор PDF: <strong>WeasyPrint Engine</strong>.
-    </p>
-</div>
+        </ul>
 </body>
 </html>
