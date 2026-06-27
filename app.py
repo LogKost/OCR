@@ -98,7 +98,7 @@ if uploaded_files and engine is not None:
 
         with col1:
             st.subheader("Исходное изображение")
-            st.image(source_image, use_container_width=True)
+            st.image(source_image, width="stretch")
 
         detected_blocks, visual_output, yolo_time = engine.execute_detection(
             source_image
@@ -178,11 +178,11 @@ if uploaded_files and engine is not None:
             with col2:
                 st.subheader("Результат локализации")
                 if visual_output is not None:
-                    st.image(visual_output, use_container_width=True)
+                    st.image(visual_output, width="stretch")
         else:
             with col2:
                 st.subheader("Результат обработки")
-                st.image(source_image, use_container_width=True)
+                st.image(source_image, width="stretch")
             st.warning("Текстовые области на данном кадре не обнаружены.")
 
             frame_segments_log.append(
@@ -216,7 +216,7 @@ if uploaded_files and engine is not None:
         saved_counter += 1
 
         st.text(
-            f"Время анализа кадра: {total_frame_time:.4f} сек. (YOLO: {yolo_time:.4f} c. | OCR: {ocr_time:.4f} c.)"
+            f"Время анализа кадра: {total_frame_time:.4f} сек. (Модель: {yolo_time:.4f} c. | OCR: {ocr_time:.4f} c.)"
         )
         st.markdown("---")
 
