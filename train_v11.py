@@ -5,7 +5,6 @@ from ultralytics import YOLO
 def main():
     PROJECT_ROOT = os.path.abspath("models")
 
-    # Просто передаем путь к файлу. Ultralytics сама создаст 'models/pretrained/' и скачает туда веса!
     model_path = os.path.join("models", "pretrained", "yolo11n.pt")
     model = YOLO(model_path)
 

@@ -1,54 +1,18 @@
-import json
 import os
-import re
 import time
 from datetime import datetime
-import easyocr
 import numpy as np
 import streamlit as st
 import torch
+import easyocr
 from PIL import Image
 
+from services.inference import UniversalInferenceFactory
+from utils.text_processing import clean_mixed_text
+from utils.evaluator import evaluate_quality
+from utils.logger import save_single_log
+
 st.set_page_config(layout="wide")
-
-
-def clean_mixed_text(text):
-    if text == "Н/Д":
-        return text
-    text = re.sub(r"\[ential", "Central", text)
-    text = re.sub(r"^\s*[\(\[\{]\s*", "C", text)
-    text = re.sub(r"\s*[\)\]\}]$", "", text)
-
-    words = text.split()
-    fixed_words = []
-    for word in words:
-        lat_count = len(re.findall(r"[a-zA-Z]", word))
-        cyr_count = len(re.findall(r"[а-яА-ЯёЁ]", word))
-        if lat_count > cyr_count and cyr_count > 0:
-            replacements = {
-                "в": "re",
-                "а": "a",
-                "е": "e",
-                "о": "o",
-                "р": "p",
-                "с": "c",
-                "х": "x",
-                "Т": "T",
-            }
-            for cyr_char, lat_char in replacements.items():
-                word = word.replace(cyr_char, lat_char)
-        fixed_words.append(word)
-
-    text = " ".join(fixed_words)
-    text = re.sub(r"\b[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]\b", "", text)
-    text = re.sub(r"\s+", " ", text).strip()
-
-    sticks_count = len(re.findall(r"[Ii1l|!\[\]\(\)]", text))
-    total_chars = len(text.replace(" ", ""))
-    if total_chars > 0 and (sticks_count / total_chars) > 0.6:
-        return "Н/Д"
-    return text if text else "Н/Д"
-
 
 st.title("Оптическая система распознавания текста в городской среде")
 st.write(
@@ -74,7 +38,6 @@ st.sidebar.text(f"Среда: {DEVICE_LABEL}")
 models_dir = "models"
 
 
-@st.cache_data
 def scan_for_models(directory):
     options = {}
     if os.path.exists(directory):
@@ -115,84 +78,7 @@ def load_ocr_engine():
 
 recognizer_engine = load_ocr_engine()
 
-
-class UniversalInferenceFactory:
-    def __init__(self, path, device_type, recognizer):
-        self.path = path
-        self.device_type = device_type
-        self.recognizer = recognizer
-        self.model_object = self._initialize_model()
-
-    def _initialize_model(self):
-        if not self.path:
-            return None
-        from ultralytics import YOLO
-
-        model = YOLO(os.path.abspath(self.path))
-        model.to(self.device_type)
-        return model
-
-    def execute_inference(self, pil_image):
-        if self.model_object is None:
-            return [], None, 0.0, 0.0
-        img_np = np.array(pil_image)
-        parsed_results = []
-
-        start_yolo = time.time()
-        outputs = self.model_object(pil_image, imgsz=640)
-        yolo_duration = time.time() - start_yolo
-
-        annotated_image = outputs[0].plot()
-
-        start_ocr = time.time()
-        for box in outputs[0].boxes:
-            conf = box.conf[0].item() * 100
-            x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
-            cropped = img_np[
-                max(0, y1) : min(img_np.shape[0], y2),
-                max(0, x1) : min(img_np.shape[1], x2),
-            ]
-            text_output = "Н/Д"
-            ocr_conf = 0.0
-
-            if cropped.size > 0:
-                ocr_res = self.recognizer.readtext(
-                    cropped,
-                    decoder="beamsearch",
-                    beamWidth=5,
-                    workers=0,
-                    adjust_contrast=0.8,
-                )
-                if ocr_res:
-                    raw_text = " ".join([res[1] for res in ocr_res])
-                    text_output = clean_mixed_text(raw_text)
-                    ocr_conf = np.mean([res[2] for res in ocr_res]) * 100
-
-            if conf < 50.0:
-                auto_quality_mark = "Ошибка локализации (Низкая уверенность)"
-            elif text_output == "Н/Д" or ocr_conf < 50.0:
-                auto_quality_mark = "Ошибка распознавания текста (Низкая точность OCR)"
-            else:
-                auto_quality_mark = "Корректно"
-
-            parsed_results.append(
-                {
-                    "coordinates": [x1, y1, x2, y2],
-                    "confidence": conf,
-                    "ocr_confidence": ocr_conf,
-                    "text": text_output,
-                    "evaluation": auto_quality_mark,
-                }
-            )
-        ocr_duration = time.time() - start_ocr
-        return parsed_results, annotated_image, yolo_duration, ocr_duration
-
-
-engine = (
-    UniversalInferenceFactory(model_path, DEVICE_TYPE, recognizer_engine)
-    if model_path
-    else None
-)
+engine = UniversalInferenceFactory(model_path, DEVICE_TYPE) if model_path else None
 
 uploaded_files = st.file_uploader(
     "Загрузка изображений для пакетного анализа:",
@@ -202,73 +88,97 @@ uploaded_files = st.file_uploader(
 
 if uploaded_files and engine is not None:
     st.success(f"Успешно загружено файлов для анализа: {len(uploaded_files)}")
-    session_records = []
+    saved_counter = 0
 
     for uploaded_file in uploaded_files:
         st.markdown(f"## Обработка файла: `{uploaded_file.name}`")
         col1, col2 = st.columns(2)
         source_image = Image.open(uploaded_file)
+        img_np = np.array(source_image)
 
         with col1:
             st.subheader("Исходное изображение")
             st.image(source_image, use_container_width=True)
 
-        detected_blocks, visual_output, yolo_time, ocr_time = engine.execute_inference(
+        detected_blocks, visual_output, yolo_time = engine.execute_detection(
             source_image
         )
-        total_frame_time = yolo_time + ocr_time
-        total_segments = len(detected_blocks)
 
+        start_ocr = time.time()
         frame_segments_log = []
+        total_segments = len(detected_blocks)
 
         if total_segments > 0:
             m1, m2 = st.columns(2)
             with m1:
                 st.metric(
-                    label="Всего найдено текстовых областей",
-                    value=total_segments,
+                    label="Всего найдено текстовых областей", value=total_segments
                 )
             with m2:
-                max_conf = max([b["confidence"] for b in detected_blocks])
+                max_conf = max([b["confidence"] for b in detected_blocks], default=0.0)
                 st.metric(
-                    label="Максимальная уверенность детектора",
-                    value=f"{max_conf:.1f}%",
+                    label="Максимальная уверенность детектора", value=f"{max_conf:.1f}%"
                 )
 
             st.write("---")
 
             for idx, block in enumerate(detected_blocks):
-                card_title = f"Сегмент №{idx + 1} | Текст: «{block['text']}»"
+                x1, y1, x2, y2 = block["coordinates"]
 
+                cropped = img_np[
+                    max(0, y1) : min(img_np.shape[0], y2),
+                    max(0, x1) : min(img_np.shape[1], x2),
+                ]
+
+                text_output = "Н/Д"
+                ocr_conf = 0.0
+
+                if cropped.size > 0:
+                    ocr_res = recognizer_engine.readtext(
+                        cropped,
+                        decoder="beamsearch",
+                        beamWidth=5,
+                        workers=0,
+                        adjust_contrast=0.8,
+                    )
+                    if ocr_res:
+                        raw_text = " ".join([res[1] for res in ocr_res])
+                        text_output = clean_mixed_text(raw_text)
+                        ocr_conf = np.mean([res[2] for res in ocr_res]) * 100
+
+                auto_quality_mark = evaluate_quality(
+                    block["confidence"], ocr_conf, text_output, [x1, y1, x2, y2]
+                )
+
+                card_title = f"Сегмент №{idx + 1} | Текст: «{text_output}»"
                 with st.expander(card_title, expanded=True):
                     c_col1, c_col2 = st.columns(2)
                     with c_col1:
                         st.markdown("**Модель детекции:**")
                         st.write(f"Точность локализации: `{block['confidence']:.2f}%`")
                         st.write(
-                            f"Геометрия рамки `[x1, y1, x2, y2]`: `{block['coordinates']}`"
+                            f"Геометрия рамки `[x1, y1, x2, y2]`: `{[x1, y1, x2, y2]}`"
                         )
                     with c_col2:
                         st.markdown("**Результат распознавания:**")
-                        st.info(f"Распознанный текст: **{block['text']}**")
-                        st.write(
-                            f"Точность OCR (уверенность): `{block['ocr_confidence']:.2f}%`"
-                        )
-                        st.write(f"Авто-оценка качества: `{block['evaluation']}`")
+                        st.info(f"Распознанный текст: **{text_output}**")
+                        st.write(f"Точность OCR (уверенность): `{ocr_conf:.2f}%`")
+                        st.write(f"Авто-оценка качества: `{auto_quality_mark}`")
 
                 frame_segments_log.append(
                     {
                         "detection_confidence_percent": round(block["confidence"], 2),
-                        "ocr_confidence_percent": round(block["ocr_confidence"], 2),
-                        "bounding_box_geometry": block["coordinates"],
-                        "ocr_output_text": block["text"],
-                        "auto_quality_mark": block["evaluation"],
+                        "ocr_confidence_percent": round(ocr_conf, 2),
+                        "bounding_box_geometry": [x1, y1, x2, y2],
+                        "ocr_output_text": text_output,
+                        "auto_quality_mark": auto_quality_mark,
                     }
                 )
+
             with col2:
                 st.subheader("Результат локализации")
                 if visual_output is not None:
-                    st.image(visual_output, channels="BGR", use_container_width=True)
+                    st.image(visual_output, use_container_width=True)
         else:
             with col2:
                 st.subheader("Результат обработки")
@@ -285,6 +195,9 @@ if uploaded_files and engine is not None:
                 }
             )
 
+        ocr_time = time.time() - start_ocr
+        total_frame_time = yolo_time + ocr_time
+
         log_data = {
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "filename": uploaded_file.name,
@@ -298,16 +211,16 @@ if uploaded_files and engine is not None:
             "total_segments_found": total_segments,
             "detected_segments": frame_segments_log,
         }
-        session_records.append(log_data)
+
+        save_single_log(log_data)
+        saved_counter += 1
 
         st.text(
             f"Время анализа кадра: {total_frame_time:.4f} сек. (YOLO: {yolo_time:.4f} c. | OCR: {ocr_time:.4f} c.)"
         )
         st.markdown("---")
 
-    if session_records:
-        os.makedirs("results", exist_ok=True)
-        with open("results/history.jsonl", "a", encoding="utf-8") as f:
-            for record in session_records:
-                f.write(json.dumps(record, ensure_ascii=False) + "\n")
-        st.sidebar.success(f"Успешно сохранено кадров: {len(session_records)}")
+        if IS_GPU:
+            torch.cuda.empty_cache()
+
+    st.sidebar.success(f"Успешно обработано и сохранено кадров: {saved_counter}")

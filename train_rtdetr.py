@@ -6,7 +6,6 @@ def main():
     PROJECT_ROOT = os.path.abspath("models")
     run_name = "rtdetr_ocr_det"
 
-    # Для RT-DETR логика точно такая же
     model_path = os.path.join("models", "pretrained", "rtdetr-l.pt")
     model = RTDETR(model_path)
 
