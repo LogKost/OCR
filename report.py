@@ -28,7 +28,6 @@ def main():
 
     df_frames = pd.DataFrame(records)
 
-    # ИСПРАВЛЕНИЕ: Расчет времени инференса строго по уникальным кадрам до explode
     time_summary = (
         df_frames.groupby("selected_architecture")["yolo_inference_time_seconds"]
         .mean()
@@ -41,7 +40,6 @@ def main():
         else "Н/Д"
     )
 
-    # ИСПРАВЛЕНИЕ: Предобработка пустых кадров для гарантированного перехвата пропусков (FN)
     df_frames["detected_segments"] = df_frames["detected_segments"].apply(
         lambda x: (
             [{"auto_quality_mark": "Пропуск детекции (Объекты не найдены)"}]
@@ -52,7 +50,6 @@ def main():
 
     df_exploded = df_frames.explode("detected_segments")
 
-    # ИСПРАВЛЕНИЕ: Безопасное развертывание во флэт-структуру без образования NaN
     segments_list = df_exploded["detected_segments"].tolist()
     flat_segments = []
     for s in segments_list:
@@ -67,7 +64,6 @@ def main():
     df_segments["selected_architecture"] = df_exploded["selected_architecture"].values
     df_segments["model_file_path"] = df_exploded["model_file_path"].values
 
-    # ИСПРАВЛЕНИЕ: Корректные и точные условия поиска тегов автоматического валидатора
     df_segments["is_tp"] = df_segments["auto_quality_mark"].apply(
         lambda x: 1 if "корректно" in str(x).lower() else 0
     )
@@ -104,7 +100,6 @@ def main():
 
     summary = pd.merge(quality_summary, time_summary, on="selected_architecture")
 
-    # ИСПРАВЛЕНИЕ: Математически безопасный расчет метрик без деления на ноль и аномалий
     def calculate_precision(row):
         total_pred = row["is_tp"] + row["is_fp"]
         return row["is_tp"] / total_pred if total_pred > 0 else 0.0

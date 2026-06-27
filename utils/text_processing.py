@@ -5,7 +5,6 @@ def clean_mixed_text(text):
     if text == "Н/Д":
         return text
 
-    text = re.sub(r"\[ential", "Central", text)
     text = re.sub(r"^\s*[\(\[\{]\s*", "C", text)
     text = re.sub(r"\s*[\)\]\}]$", "", text)
 
@@ -13,7 +12,6 @@ def clean_mixed_text(text):
     fixed_words = []
 
     replacements = {
-        "в": "re",
         "а": "a",
         "е": "e",
         "о": "o",
