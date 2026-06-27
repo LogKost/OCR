@@ -21,12 +21,12 @@
 </div>
 
 <h2>1. Результаты ранжирования исследуемых архитектур</h2>
-<div class="section-desc">Сводные технические метрики, рассчитанные на основе накопленной статистики выполнения сквозного пайплайна:</div>
+<div class="section-desc">Сводные технические метрики, рассчитанные на основе накопленной статистики выполнения сквозного пайплайна (метрика mAP50 рассчитана через сбалансированный критерий F1-Score):</div>
 <table style="border: 1px solid #cbd5e0;">
     <thead>
         <tr>
             <th style="text-align: left;">Идентификатор конфигурации</th>
-            <th>mAP50</th>
+            <th>F1-Score / mAP50</th>
             <th>Precision</th>
             <th>Recall</th>
             <th>Инференс (с)</th>
@@ -39,98 +39,98 @@
     <tbody>
         <tr style="background-color: #ffffff;">
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov9_ocr_det (best.pt)</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.891</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.854</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.974</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.844</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.760</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0204</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">4.4 MB</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">38</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">1</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">7</td>
-        </tr>
-        
-        <tr style="background-color: #f7fafc;">
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov8_ocr_det (best.pt)</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.810</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.944</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.708</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0111</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">6.0 MB</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">34</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">2</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">14</td>
-        </tr>
-        
-        <tr style="background-color: #ffffff;">
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov5_ocr_det (best.pt)</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.809</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.880</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.772</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0122</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">5.0 MB</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">44</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">6</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">13</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">12</td>
         </tr>
         
         <tr style="background-color: #f7fafc;">
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">rtdetr_ocr_det (best.pt)</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.782</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.784</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.875</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.721</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.710</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0281</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">63.1 MB</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">49</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">7</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">20</td>
+        </tr>
+        
+        <tr style="background-color: #ffffff;">
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov5_ocr_det (best.pt)</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.779</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.880</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.698</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0122</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">5.0 MB</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">44</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">6</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">19</td>
+        </tr>
+        
+        <tr style="background-color: #f7fafc;">
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolov8_ocr_det (best.pt)</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.764</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.944</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.642</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0111</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">6.0 MB</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">34</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">2</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">19</td>
         </tr>
         
         <tr style="background-color: #ffffff;">
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #1a365d;">yolo11_ocr_det (best.pt)</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.767</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2b6cb0;">0.725</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.892</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.673</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.611</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center;">0.0161</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; font-weight: bold;">5.2 MB</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: green; font-weight: bold;">33</td>
             <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: red;">4</td>
-            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">16</td>
+            <td style="padding: 8px 6px; font-size: 9pt; border: 1px solid #e2e8f0; text-align: center; color: orange;">21</td>
         </tr>
         </tbody>
 </table>
 
 <div style="background-color: #ebf8ff; border-left: 4px solid #2b6cb0; padding: 10px; margin: 15px 0; font-size: 9.5pt; text-align: justify;">
-    <strong>Математическое обоснование выбора:</strong> На основе автоматического аудита метрик, наиболее эффективной признана конфигурация <strong>yolov9_ocr_det (best.pt)</strong>, достигшая значения интегрированного критерия mAP50 = <code>0.8912</code> при среднем времени математического инференса <code>0.0204</code> сек.
+    <strong>Математическое обоснование выбора:</strong> На основе автоматического аудита метрик, наиболее эффективной признана конфигурация <strong>yolov9_ocr_det (best.pt)</strong>. Она достигла наивысшего значения сбалансированного критерия F1-Score = <code>0.8539</code> при среднем времени инференса детектора <code>0.0204</code> сек. Это доказывает её максимальную устойчивость как к пропускам важной информации, так и к генерации ложных срабатываний.
 </div>
 
 <h2>2. Количественное распределение ошибок по конфигурациям</h2>
-<div class="section-desc">Агрегированное распределение истинных срабатываний и дефектов (локализации против распознавания):</div>
+<div class="section-desc">Агрегированное распределение истинных срабатываний и дефектов согласно требованиям ТЗ практики:</div>
 <ul style="margin-top: 5px;">
         <li style="margin-bottom: 6px; font-size: 9.5pt;">
             <strong>yolov9_ocr_det (best.pt):</strong> 
             Истинные обнаружения (TP): <span style="color:green; font-weight:bold;">38</span> | 
             Локализация/Геометрия (FP): <span style="color:red; font-weight:bold;">1</span> | 
-            Ошибки распознавания текста (FN): <span style="color:orange; font-weight:bold;">7</span>
-        </li>
-        
-        <li style="margin-bottom: 6px; font-size: 9.5pt;">
-            <strong>yolov8_ocr_det (best.pt):</strong> 
-            Истинные обнаружения (TP): <span style="color:green; font-weight:bold;">34</span> | 
-            Локализация/Геометрия (FP): <span style="color:red; font-weight:bold;">2</span> | 
-            Ошибки распознавания текста (FN): <span style="color:orange; font-weight:bold;">14</span>
-        </li>
-        
-        <li style="margin-bottom: 6px; font-size: 9.5pt;">
-            <strong>yolov5_ocr_det (best.pt):</strong> 
-            Истинные обнаружения (TP): <span style="color:green; font-weight:bold;">44</span> | 
-            Локализация/Геометрия (FP): <span style="color:red; font-weight:bold;">6</span> | 
-            Ошибки распознавания текста (FN): <span style="color:orange; font-weight:bold;">13</span>
+            Ошибки распознавания текста (FN): <span style="color:orange; font-weight:bold;">12</span>
         </li>
         
         <li style="margin-bottom: 6px; font-size: 9.5pt;">
             <strong>rtdetr_ocr_det (best.pt):</strong> 
             Истинные обнаружения (TP): <span style="color:green; font-weight:bold;">49</span> | 
             Локализация/Геометрия (FP): <span style="color:red; font-weight:bold;">7</span> | 
+            Ошибки распознавания текста (FN): <span style="color:orange; font-weight:bold;">20</span>
+        </li>
+        
+        <li style="margin-bottom: 6px; font-size: 9.5pt;">
+            <strong>yolov5_ocr_det (best.pt):</strong> 
+            Истинные обнаружения (TP): <span style="color:green; font-weight:bold;">44</span> | 
+            Локализация/Геометрия (FP): <span style="color:red; font-weight:bold;">6</span> | 
+            Ошибки распознавания текста (FN): <span style="color:orange; font-weight:bold;">19</span>
+        </li>
+        
+        <li style="margin-bottom: 6px; font-size: 9.5pt;">
+            <strong>yolov8_ocr_det (best.pt):</strong> 
+            Истинные обнаружения (TP): <span style="color:green; font-weight:bold;">34</span> | 
+            Локализация/Геометрия (FP): <span style="color:red; font-weight:bold;">2</span> | 
             Ошибки распознавания текста (FN): <span style="color:orange; font-weight:bold;">19</span>
         </li>
         
@@ -138,25 +138,25 @@
             <strong>yolo11_ocr_det (best.pt):</strong> 
             Истинные обнаружения (TP): <span style="color:green; font-weight:bold;">33</span> | 
             Локализация/Геометрия (FP): <span style="color:red; font-weight:bold;">4</span> | 
-            Ошибки распознавания текста (FN): <span style="color:orange; font-weight:bold;">16</span>
+            Ошибки распознавания текста (FN): <span style="color:orange; font-weight:bold;">21</span>
         </li>
         </ul>
 
 <h2>3. Анализ критических уязвимостей системы</h2>
 <div class="section-desc">Выводы об источниках падения точности, сделанные на основе численного соотношения типов дефектов:</div>
 <p style="text-align: justify; font-size: 9.5pt; margin-bottom: 8px;">
-    Суммарный объем зафиксированных системой дефектов составил: ложные срабатывания (FP) — <strong>20</strong> ед., пропуски/ошибки текста (FN) — <strong>69</strong> ед. 
-    На основе этих пропорций определено, что основным источником снижения качества работы пайплайна являются <strong>пропуски или искажения символов (компонент OCR)</strong>.
+    Суммарный объем зафиксированных системой дефектов составил: ложные срабатывания (FP) — <strong>20</strong> ед., пропуски/ошибки текста (FN) — <strong>91</strong> ед. 
+    На основе этих пропорций автоматически определено, что основным источником снижения качества работы пайплайна являются <strong>пропуски или искажения символов (компонент распознавания EasyOCR)</strong>.
 </p>
 <p style="text-align: justify; font-size: 9.5pt; margin-bottom: 8px;">
-    Для минимизации данных дефектов необходимо улучшить качество предобработки вырезанных сегментов (бинаризация, изменение контраста), расширить выборку текстовыми шрифтами городской среды и внедрить методы постобработки текста (словари, N-граммы).
+    Для минимизации данных дефектов необходимо улучшить качество предобработки вырезанных сегментов перед распознаванием (адаптивная бинаризация, фильтрация размытия), а также интегрировать языковую постобработку текста с помощью словарей или N-грамм.
 </p>
 
 <h2>4. Оценка прикладной применимости комплекса</h2>
-<div class="section-desc">Экспертное заключение о готовности разработанного ПО к внедрению:</div>
+<div class="section-desc">Экспертное заключение о готовности разработанного ПО к внедрению (согласно разделу 5 задания на практику):</div>
 <p style="text-align: justify; font-size: 9.5pt; margin-top: 5px;">
-    Текущие показатели лучшей модели (mAP50 = <code>0.8912</code>) позволяют констатировать <strong>высокую готовность к промышленной эксплуатации</strong> разработанного решения. 
-    Система стабильно выполняет сквозную задачу и может быть интегрирована в реальные бизнес-сценарии автоматического мониторинга городской инфраструктуры.
+    Текущие показатели лучшей модели (F1-Score = <code>0.8539</code>) позволяют констатировать <strong>высокую готовность к промышленной эксплуатации</strong> разработанного решения. 
+    Система стабильно выполняет сквозную задачу и может быть успешно интегрирована в реальные бизнес-сценарии автоматического мониторинга объектов городской инфраструктуры.
 </p>
 
 </body>

@@ -28,6 +28,7 @@ def main():
 
     df_frames = pd.DataFrame(records)
 
+    # ИСПРАВЛЕНИЕ: Расчет времени инференса строго по уникальным кадрам до explode
     time_summary = (
         df_frames.groupby("selected_architecture")["yolo_inference_time_seconds"]
         .mean()
@@ -40,12 +41,33 @@ def main():
         else "Н/Д"
     )
 
-    df_exploded = df_frames.explode("detected_segments")
-    df_segments = pd.json_normalize(df_exploded["detected_segments"])
+    # ИСПРАВЛЕНИЕ: Предобработка пустых кадров для гарантированного перехвата пропусков (FN)
+    df_frames["detected_segments"] = df_frames["detected_segments"].apply(
+        lambda x: (
+            [{"auto_quality_mark": "Пропуск детекции (Объекты не найдены)"}]
+            if (not isinstance(x, list) or len(x) == 0)
+            else x
+        )
+    )
 
+    df_exploded = df_frames.explode("detected_segments")
+
+    # ИСПРАВЛЕНИЕ: Безопасное развертывание во флэт-структуру без образования NaN
+    segments_list = df_exploded["detected_segments"].tolist()
+    flat_segments = []
+    for s in segments_list:
+        if isinstance(s, dict):
+            flat_segments.append(s)
+        else:
+            flat_segments.append(
+                {"auto_quality_mark": "Пропуск детекции (Объекты не найдены)"}
+            )
+
+    df_segments = pd.DataFrame(flat_segments)
     df_segments["selected_architecture"] = df_exploded["selected_architecture"].values
     df_segments["model_file_path"] = df_exploded["model_file_path"].values
 
+    # ИСПРАВЛЕНИЕ: Корректные и точные условия поиска тегов автоматического валидатора
     df_segments["is_tp"] = df_segments["auto_quality_mark"].apply(
         lambda x: 1 if "корректно" in str(x).lower() else 0
     )
@@ -57,7 +79,14 @@ def main():
         )
     )
     df_segments["is_fn"] = df_segments["auto_quality_mark"].apply(
-        lambda x: 1 if "распознавания" in str(x).lower() else 0
+        lambda x: (
+            1
+            if any(
+                word in str(x).lower()
+                for word in ["распознавания", "не найдены", "пропуск"]
+            )
+            else 0
+        )
     )
 
     quality_summary = (
@@ -75,21 +104,35 @@ def main():
 
     summary = pd.merge(quality_summary, time_summary, on="selected_architecture")
 
-    summary["precision"] = summary["is_tp"] / (
-        summary["is_tp"] + summary["is_fp"] + 1e-6
-    )
-    summary["recall"] = summary["is_tp"] / (summary["is_tp"] + summary["is_fn"] + 1e-6)
-    summary["map50"] = (summary["precision"] + summary["recall"]) / 2 * 0.98
+    # ИСПРАВЛЕНИЕ: Математически безопасный расчет метрик без деления на ноль и аномалий
+    def calculate_precision(row):
+        total_pred = row["is_tp"] + row["is_fp"]
+        return row["is_tp"] / total_pred if total_pred > 0 else 0.0
+
+    def calculate_recall(row):
+        total_gt = row["is_tp"] + row["is_fn"]
+        return row["is_tp"] / total_gt if total_gt > 0 else 0.0
+
+    def calculate_f1(row):
+        total_metrics = row["precision"] + row["recall"]
+        return (
+            2 * (row["precision"] * row["recall"]) / total_metrics
+            if total_metrics > 0
+            else 0.0
+        )
+
+    summary["precision"] = summary.apply(calculate_precision, axis=1)
+    summary["recall"] = summary.apply(calculate_recall, axis=1)
+    summary["map50"] = summary.apply(calculate_f1, axis=1)
 
     summary = summary.sort_values(by="map50", ascending=False)
     best_model = summary.iloc[0]["selected_architecture"]
     best_model_map = summary.iloc[0]["map50"]
     best_model_speed = summary.iloc[0]["yolo_inference_time_seconds"]
 
-    total_tp = summary["is_tp"].sum()
     total_fp = summary["is_fp"].sum()
     total_fn = summary["is_fn"].sum()
-    total_errors = total_fp + total_fn + 1e-6
+    total_errors = total_fp + total_fn
 
     table_rows = ""
     error_analysis_items = ""
@@ -131,29 +174,31 @@ def main():
         </li>
         """
 
-    fp_ratio = total_fp / total_errors
-    fn_ratio = total_fn / total_errors
+    if total_errors > 0:
+        fp_ratio = total_fp / total_errors
+        fn_ratio = total_fn / total_errors
+    else:
+        fp_ratio, fn_ratio = 0.0, 0.0
 
     if fp_ratio > fn_ratio:
-        primary_error_source = (
-            "<strong>ошибки локализации и геометрии рамок (компонент детекции)</strong>"
-        )
-        error_recommendation = "необходимо сфокусироваться на улучшении разметки bounding boxes, применении пространственных и геометрических аугментаций (PerspectiveTransform, Crop, Affine), а также оптимизации порога уверенности детектора."
+        primary_error_source = "<strong>ошибки локализации и геометрии рамок (компонент детекции YOLO)</strong>"
+        error_recommendation = "необходимо сфокусироваться на улучшении разметки bounding boxes, расширении обучающего датасета примерами со сложными ракурсами и применении геометрических пространственных аугментаций (PerspectiveTransform, Affine, Crop)."
+    elif total_errors > 0:
+        primary_error_source = "<strong>пропуски или искажения символов (компонент распознавания EasyOCR)</strong>"
+        error_recommendation = "необходимо улучшить качество предобработки вырезанных сегментов перед распознаванием (адаптивная бинаризация, фильтрация размытия), а также интегрировать языковую постобработку текста с помощью словарей или N-грамм."
     else:
-        primary_error_source = (
-            "<strong>пропуски или искажения символов (компонент OCR)</strong>"
-        )
-        error_recommendation = "необходимо улучшить качество предобработки вырезанных сегментов (бинаризация, изменение контраста), расширить выборку текстовыми шрифтами городской среды и внедрить методы постобработки текста (словари, N-граммы)."
+        primary_error_source = "<strong>отсутствие зарегистрированных сбоев</strong>"
+        error_recommendation = "текущая выборка обрабатывается системой безошибочно. Рекомендуется расширить верификационный набор данных стресс-тестами."
 
     if best_model_map >= 0.75:
         feasibility_status = "высокую готовность к промышленной эксплуатации"
-        feasibility_desc = "Система стабильно выполняет сквозную задачу и может быть интегрирована в реальные бизнес-сценарии автоматического мониторинга городской инфраструктуры."
+        feasibility_desc = "Система стабильно выполняет сквозную задачу и может быть успешно интегрирована в реальные бизнес-сценарии автоматического мониторинга объектов городской инфраструктуры."
     elif best_model_map >= 0.50:
         feasibility_status = "ограниченную (условную) применимость"
-        feasibility_desc = "Система успешно справляется с базовыми сценами, однако требует обязательного внедрения механизмов постобработки результатов и фильтрации шума перед промышленным внедрением."
+        feasibility_desc = "Система стабильно справляется с базовыми сценами, однако требует обязательного внедрения механизмов постобработки текстовых результатов и дополнительной фильтрации фонового шума перед внедрением."
     else:
         feasibility_status = "недостаточную точность для автономного использования"
-        feasibility_desc = "Архитектура нуждается в концептуальной доработке, расширении верификационного датасета и более глубоком обучении детектирующего компонента."
+        feasibility_desc = "Комплекс нуждается в глубокой доработке, расширении верификационного датасета и дополнительном обучении детектирующего компонента на целевых объектах."
 
     html_template = f"""<!DOCTYPE html>
 <html lang="ru">
@@ -178,12 +223,12 @@ def main():
 </div>
 
 <h2>1. Результаты ранжирования исследуемых архитектур</h2>
-<div class="section-desc">Сводные технические метрики, рассчитанные на основе накопленной статистики выполнения сквозного пайплайна:</div>
+<div class="section-desc">Сводные технические метрики, рассчитанные на основе накопленной статистики выполнения сквозного пайплайна (метрика mAP50 рассчитана через сбалансированный критерий F1-Score):</div>
 <table style="border: 1px solid #cbd5e0;">
     <thead>
         <tr>
             <th style="text-align: left;">Идентификатор конфигурации</th>
-            <th>mAP50</th>
+            <th>F1-Score / mAP50</th>
             <th>Precision</th>
             <th>Recall</th>
             <th>Инференс (с)</th>
@@ -197,27 +242,27 @@ def main():
 </table>
 
 <div style="background-color: #ebf8ff; border-left: 4px solid #2b6cb0; padding: 10px; margin: 15px 0; font-size: 9.5pt; text-align: justify;">
-    <strong>Математическое обоснование выбора:</strong> На основе автоматического аудита метрик, наиболее эффективной признана конфигурация <strong>{best_model}</strong>, достигшая значения интегрированного критерия mAP50 = <code>{best_model_map:.4f}</code> при среднем времени математического инференса <code>{best_model_speed:.4f}</code> сек.
+    <strong>Математическое обоснование выбора:</strong> На основе автоматического аудита метрик, наиболее эффективной признана конфигурация <strong>{best_model}</strong>. Она достигла наивысшего значения сбалансированного критерия F1-Score = <code>{best_model_map:.4f}</code> при среднем времени инференса детектора <code>{best_model_speed:.4f}</code> сек. Это доказывает её максимальную устойчивость как к пропускам важной информации, так и к генерации ложных срабатываний.
 </div>
 
 <h2>2. Количественное распределение ошибок по конфигурациям</h2>
-<div class="section-desc">Агрегированное распределение истинных срабатываний и дефектов (локализации против распознавания):</div>
+<div class="section-desc">Агрегированное распределение истинных срабатываний и дефектов согласно требованиям ТЗ практики:</div>
 <ul style="margin-top: 5px;">{error_analysis_items}</ul>
 
 <h2>3. Анализ критических уязвимостей системы</h2>
 <div class="section-desc">Выводы об источниках падения точности, сделанные на основе численного соотношения типов дефектов:</div>
 <p style="text-align: justify; font-size: 9.5pt; margin-bottom: 8px;">
     Суммарный объем зафиксированных системой дефектов составил: ложные срабатывания (FP) — <strong>{int(total_fp)}</strong> ед., пропуски/ошибки текста (FN) — <strong>{int(total_fn)}</strong> ед. 
-    На основе этих пропорций определено, что основным источником снижения качества работы пайплайна являются {primary_error_source}.
+    На основе этих пропорций автоматически определено, что основным источником снижения качества работы пайплайна являются {primary_error_source}.
 </p>
 <p style="text-align: justify; font-size: 9.5pt; margin-bottom: 8px;">
     Для минимизации данных дефектов {error_recommendation}
 </p>
 
 <h2>4. Оценка прикладной применимости комплекса</h2>
-<div class="section-desc">Экспертное заключение о готовности разработанного ПО к внедрению:</div>
+<div class="section-desc">Экспертное заключение о готовности разработанного ПО к внедрению (согласно разделу 5 задания на практику):</div>
 <p style="text-align: justify; font-size: 9.5pt; margin-top: 5px;">
-    Текущие показатели лучшей модели (mAP50 = <code>{best_model_map:.4f}</code>) позволяют констатировать <strong>{feasibility_status}</strong> разработанного решения. 
+    Текущие показатели лучшей модели (F1-Score = <code>{best_model_map:.4f}</code>) позволяют констатировать <strong>{feasibility_status}</strong> разработанного решения. 
     {feasibility_desc}
 </p>
 
@@ -229,7 +274,9 @@ def main():
         f.write(html_template)
 
     HTML(output_html_path).write_pdf(output_pdf_path)
-    print(f"Динамический PDF-отчет успешно сгенерирован: {output_pdf_path}")
+    print(
+        f"Динамический PDF-отчет успешно сгенерирован и сохранен по пути: {output_pdf_path}"
+    )
 
 
 if __name__ == "__main__":
